@@ -7,8 +7,9 @@ import { summarize } from './summary';
 import { detectLanguage } from './language';
 import { analyzeSentences, computeWordLengthDistribution, computeSentenceLengthDistribution } from './sentences';
 import { tokenize, isStopWord } from '../textUtils';
+import { analyzeDocumentLocally } from './docAnalyzer';
 
-export function analyzeText(text: string): AnalysisResult {
+export function analyzeText(text: string, title = 'Untitled Document'): AnalysisResult {
   const stats = computeStats(text);
   const readability = computeReadability(text);
   const keywords = extractKeywords(text);
@@ -31,6 +32,8 @@ export function analyzeText(text: string): AnalysisResult {
     .slice(0, 50)
     .map(([word, count]) => ({ word, count }));
 
+  const docAnalysis = analyzeDocumentLocally(text, title);
+
   return {
     stats,
     readability,
@@ -44,5 +47,6 @@ export function analyzeText(text: string): AnalysisResult {
     sentenceLengthDistribution,
     topWords,
     analyzedAt: new Date().toISOString(),
+    docAnalysis,
   };
 }

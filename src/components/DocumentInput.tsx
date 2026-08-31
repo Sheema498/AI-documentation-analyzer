@@ -1,69 +1,126 @@
 import { useState, useRef, useCallback } from 'react';
-import { Upload, FileText, Sparkles, X, Loader2, AlertCircle } from 'lucide-react';
-import { extractTextFromFile } from '@/lib/fileExtractor';
+import { Upload, FileText, Sparkles, X, Loader2, AlertCircle, Settings, HelpCircle, Eye, EyeOff, ShieldCheck } from 'lucide-react';
 
 interface DocumentInputProps {
   onAnalyze: (text: string, title: string) => void;
   isAnalyzing: boolean;
+  apiKey: string;
+  setApiKey: (key: string) => void;
+  engine: 'local' | 'gemini';
+  setEngine: (engine: 'local' | 'gemini') => void;
 }
 
-const SAMPLE_TEXTS: { title: string; text: string }[] = [
+const SAMPLE_DOCS = [
   {
-    title: 'Climate Change',
-    text: `Climate change represents one of the most significant challenges facing humanity today. The Earth's average temperature has risen approximately 1.1 degrees Celsius since the late nineteenth century, primarily due to human activities such as burning fossil fuels, deforestation, and industrial processes. These activities release greenhouse gases like carbon dioxide and methane into the atmosphere, trapping heat and altering global weather patterns.
+    title: 'README - Technical Library',
+    text: `# Antigravity SDK
 
-The consequences of climate change are far-reaching and devastating. Rising sea levels threaten coastal communities, while extreme weather events including hurricanes, droughts, and floods have become more frequent and severe. Ecosystems are being disrupted, with many species facing extinction as their habitats change faster than they can adapt. Agricultural systems are under stress, with crop yields becoming less predictable and food security emerging as a major concern.
+This is a library designed to help developers build frontend applications. By integrating our SDK, you can quickly configure database endpoints.
 
-However, there is hope. Renewable energy technologies have advanced dramatically, with solar and wind power becoming increasingly cost-competitive with fossil fuels. Electric vehicles are gaining market share, and energy efficiency improvements are reducing overall consumption. International agreements like the Paris Accord have united nations in commitment to limit global warming. Individual actions, from reducing meat consumption to using public transportation, also contribute meaningfully to mitigation efforts.
+To setup the application, run these commands:
 
-The transition to a sustainable future requires collective action at every level. Governments must implement policies that incentivize clean energy and penalize pollution. Businesses must innovate and adopt sustainable practices. And individuals must make conscious choices that reduce their carbon footprint. Together, we can address this challenge and build a more resilient world for future generations.`,
+$ npm install antigravity-sdk
+$ npm run configure
+
+## Usage
+Simply import the library in your code:
+import { Antigravity } from 'antigravity-sdk';
+
+The SDK will load the credentials. The front-end layout is fully customisable.
+
+## Configuration
+The environment details can be stored in the config file.`,
   },
   {
-    title: 'Technology & Society',
-    text: `Technology has fundamentally transformed the way we live, work, and interact with one another. From the invention of the wheel to the development of artificial intelligence, technological progress has been the defining characteristic of human civilization. Today, we stand at the precipice of a new era, one in which machines can learn, reason, and create in ways that were once the exclusive domain of human intelligence.
+    title: 'User Manual - SmartHome Hub',
+    text: `SmartHome Hub User Manual
+Version 2.4.0
 
-The benefits of technological advancement are undeniable. Medical technology has extended human lifespans and improved quality of life for millions. Communication technologies have connected people across vast distances, making the world smaller and more accessible. Agricultural technology has increased food production to feed a growing global population. And digital technology has democratized access to information, empowering individuals with knowledge that was once available only to the privileged few.
+Congratulations on purchasing the SmartHome Hub. This device is used to connect all smart plugs and cameras in your house.
 
-Yet technology also presents significant challenges. Social media platforms, while connecting people, have also contributed to polarization, misinformation, and mental health issues. Automation threatens to displace millions of workers, requiring massive retraining and economic adjustment. Privacy concerns have escalated as personal data becomes a commodity. And the environmental impact of technology, from energy-hungry data centers to electronic waste, cannot be ignored.
+Usage Instructions:
+Step 1: Plug the device into the wall.
+Step 2: Open the application on your smartphone.
+Step 3: Press the pairing button on the side of the hub.
 
-The key to navigating these challenges lies in responsible innovation. We must develop technologies that serve human needs while minimizing harm. This requires thoughtful regulation, ethical frameworks, and inclusive decision-making processes. It requires considering not just what technology can do, but what it should do. And it requires ensuring that the benefits of technological progress are shared equitably across society.
+If the pairing light does not turn green, it is obviously a connectivity issue. You should simply reset the device by holding the power button.
 
-As we look to the future, we must embrace a balanced approach to technology. Innovation should be guided by human values, not just market forces. Technology should augment human capabilities, not replace them. And progress should be measured not just in economic terms, but in terms of human flourishing and planetary health.`,
+This manual explains how everything is operated. The settings are automatically synced to the cloud.`,
   },
   {
-    title: 'The Art of Writing',
-    text: `Writing is both a craft and an art form. It is the practice of capturing thoughts, ideas, and emotions in words and arranging them in ways that inform, persuade, or inspire. Good writing is clear, concise, and compelling. Great writing transcends mere communication to become an experience that moves the reader.
+    title: 'Product Requirements (PRD)',
+    text: `# Product Requirements Document: SmartSearch Feature
 
-The foundation of good writing is clarity. A writer must know what they want to say and say it directly. This does not mean writing should be simplistic. Rather, it means that complexity should serve understanding, not obscure it. Every word should earn its place on the page. Every sentence should advance the writer's purpose. Every paragraph should build upon the last to create a coherent whole.
+## Introduction
+We are building a smart search feature inside the app. This feature enables users to query their database in natural language.
 
-Concision is the partner of clarity. The most powerful writing often uses the fewest words. This does not mean that all writing should be short. It means that writing should be no longer than it needs to be. Cut unnecessary adverbs. Eliminate redundant phrases. Choose strong verbs over weak ones modified by adverbs. Trust your reader to understand implication without over-explanation.
+## Goals
+1. Increase search conversion rates.
+2. Provide sub-second query latency.
 
-Compelling writing engages the reader on multiple levels. It uses vivid language to create images in the mind. It varies sentence structure to maintain rhythm and interest. It employs rhetorical devices like metaphor, analogy, and parallelism to deepen meaning. And it maintains a consistent voice that reflects the writer's personality and purpose.
-
-Revision is where good writing becomes great. The first draft is for the writer. Subsequent drafts are for the reader. Read your work aloud to catch awkward phrasing. Cut what does not serve the whole. Rearrange for better flow. And always, always proofread. The difference between amateur and professional writing is often found in the revision process.`,
+## Scope
+Includes backend parsing, keyword mapping, and results rendering. Does not include multi-language voice search in Phase 1.`,
   },
 ];
 
-export function DocumentInput({ onAnalyze, isAnalyzing }: DocumentInputProps) {
+export function DocumentInput({
+  onAnalyze,
+  isAnalyzing,
+  apiKey,
+  setApiKey,
+  engine,
+  setEngine,
+}: DocumentInputProps) {
   const [text, setText] = useState('');
   const [title, setTitle] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState('');
   const [isExtracting, setIsExtracting] = useState(false);
   const [fileName, setFileName] = useState('');
+  const [fileDetails, setFileDetails] = useState<{ size: number; type: string } | null>(null);
+  
+  const [showSettings, setShowSettings] = useState(false);
+  const [showKey, setShowKey] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = useCallback(async (file: File) => {
     setError('');
-    setIsExtracting(true);
     setFileName(file.name);
+    setFileDetails({ size: file.size, type: file.type });
+    setIsExtracting(true);
+
+    // 1. Validate File Size (10MB limit)
+    if (file.size > 10 * 1024 * 1024) {
+      setError('File is too large. The maximum supported size is 10MB.');
+      setFileName('');
+      setFileDetails(null);
+      setIsExtracting(false);
+      return;
+    }
+
+    // 2. Validate Empty File
+    if (file.size === 0) {
+      setError('The uploaded file is empty. Please upload a valid document.');
+      setFileName('');
+      setFileDetails(null);
+      setIsExtracting(false);
+      return;
+    }
+
+    // 3. Extract Text & Handle Corruption/Errors
     try {
+      const { extractTextFromFile } = await import('@/lib/fileExtractor');
       const extracted = await extractTextFromFile(file);
+      if (!extracted.text || extracted.text.trim().length === 0) {
+        throw new Error('Extracted text is empty or could not be decoded.');
+      }
       setText(extracted.text);
       setTitle(file.name.replace(/\.[^.]+$/, ''));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to read file');
+      setError(err instanceof Error ? err.message : 'Corrupted or unreadable document file.');
       setFileName('');
+      setFileDetails(null);
     } finally {
       setIsExtracting(false);
     }
@@ -83,7 +140,12 @@ export function DocumentInput({ onAnalyze, isAnalyzing }: DocumentInputProps) {
 
   const handleAnalyze = () => {
     if (text.trim().length < 10) {
-      setError('Please enter at least 10 characters of text to analyze.');
+      setError('Please enter or upload at least 10 characters of text to analyze.');
+      return;
+    }
+    if (engine === 'gemini' && !apiKey.trim()) {
+      setError('Please enter your Gemini API Key in the settings below to use the AI engine, or switch to the Local Rules Engine.');
+      setShowSettings(true);
       return;
     }
     setError('');
@@ -95,34 +157,61 @@ export function DocumentInput({ onAnalyze, isAnalyzing }: DocumentInputProps) {
     setTitle(sample.title);
     setError('');
     setFileName('');
+    setFileDetails(null);
   };
 
   const clearAll = () => {
     setText('');
     setTitle('');
     setFileName('');
+    setFileDetails(null);
     setError('');
+  };
+
+  const removeFile = () => {
+    setFileName('');
+    setFileDetails(null);
+    setText('');
+  };
+
+  const formatSize = (bytes: number): string => {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
 
   return (
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-8 animate-fade-in">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 mb-4">
-          <Sparkles className="w-8 h-8 text-blue-400" />
-        </div>
-        <h1 className="text-3xl font-bold gradient-text mb-2">AI Document Analyzer</h1>
-        <p className="text-slate-400 max-w-lg mx-auto">
-          Paste text or upload a document to get instant insights: readability, sentiment,
-          keywords, summary, language detection, and detailed statistics.
+        <h1 className="text-3xl font-extrabold tracking-tight text-text-primary mb-2">
+          Documentation Auditor
+        </h1>
+        <p className="text-text-secondary max-w-lg mx-auto text-sm leading-relaxed">
+          Upload technical manuals, API guides, READMEs, or PRDs to assess structure, completeness, readability, and technical accuracy.
         </p>
       </div>
 
-      {/* Upload Zone */}
+      {/* Upload Zone (The ENTIRE box is a keyboard-accessible click target) */}
       <div
-        className={`relative rounded-2xl border-2 border-dashed transition-all duration-300 mb-4 ${
+        role="button"
+        tabIndex={0}
+        onClick={() => {
+          if (!isExtracting && !isAnalyzing) {
+            fileInputRef.current?.click();
+          }
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (!isExtracting && !isAnalyzing) {
+              fileInputRef.current?.click();
+            }
+          }
+        }}
+        className={`relative rounded-xl border-2 border-dashed transition-all duration-200 mb-4 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-[#07111F] ${
           isDragging
-            ? 'border-blue-500 bg-blue-500/10 scale-[1.01]'
-            : 'border-slate-700 bg-slate-900/40 hover:border-slate-600'
+            ? 'border-primary bg-primary-soft scale-[1.005]'
+            : 'border-border bg-surface-secondary hover:border-border-strong hover:bg-surface-hover'
         }`}
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
         onDragLeave={() => setIsDragging(false)}
@@ -132,78 +221,190 @@ export function DocumentInput({ onAnalyze, isAnalyzing }: DocumentInputProps) {
           ref={fileInputRef}
           type="file"
           className="hidden"
-          accept=".txt,.md,.csv,.json,.html,.htm,.xml,.pdf,.docx,.doc,.rtf,text/*"
+          accept=".txt,.md,.pdf,.docx"
           onChange={handleFileSelect}
         />
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          disabled={isExtracting || isAnalyzing}
-          className="w-full px-6 py-8 flex flex-col items-center gap-3 text-center disabled:opacity-50"
-        >
+        <div className="w-full px-6 py-12 flex flex-col items-center gap-3 text-center">
           {isExtracting ? (
             <>
-              <Loader2 className="w-8 h-8 text-blue-400 animate-spin-slow" />
-              <span className="text-sm text-slate-400">Extracting text from {fileName}...</span>
+              <Loader2 className="w-8 h-8 text-primary animate-spin" />
+              <span className="text-sm text-text-secondary font-semibold">Extracting document text...</span>
             </>
+          ) : fileName ? (
+            <div className="flex flex-col items-center gap-3 w-full max-w-md">
+              <div className="w-12 h-12 rounded-xl bg-surface border border-border text-text-secondary flex items-center justify-center">
+                <FileText className="w-6 h-6" />
+              </div>
+              <div className="text-center w-full">
+                <p className="text-sm font-semibold text-text-primary truncate">{fileName}</p>
+                <div className="flex items-center justify-center gap-2 text-xs text-text-muted mt-1">
+                  <span>{formatSize(fileDetails?.size || 0)}</span>
+                  <span>•</span>
+                  <span className="uppercase">{fileDetails?.type?.split('/')[1] || fileName.split('.').pop() || 'unknown'}</span>
+                </div>
+              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); // Avoid triggering file select click again
+                  removeFile();
+                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface hover:bg-surface-hover text-text-secondary border border-border text-xs font-semibold transition-all"
+              >
+                <X className="w-3.5 h-3.5" />
+                Remove File
+              </button>
+            </div>
           ) : (
             <>
-              <Upload className="w-8 h-8 text-slate-500" />
+              <Upload className="w-8 h-8 text-text-muted" />
               <div>
-                <span className="text-sm font-medium text-slate-300">
-                  Drop a file here or click to browse
+                <span className="text-sm font-bold text-text-primary">
+                  Drop your document here
                 </span>
-                <p className="text-xs text-slate-500 mt-1">
-                  Supports TXT, PDF, DOCX, DOC, RTF, HTML, MD, CSV, JSON, XML
+                <span className="text-sm text-text-secondary"> or click anywhere to browse</span>
+                <p className="text-xs text-text-muted mt-2 font-medium">
+                  PDF • DOCX • TXT • MD (up to 10MB)
                 </p>
               </div>
             </>
           )}
-        </button>
+        </div>
       </div>
 
-      {fileName && !isExtracting && (
-        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-800/60 border border-slate-700/50 mb-4 animate-slide-up">
-          <FileText className="w-4 h-4 text-blue-400 flex-shrink-0" />
-          <span className="text-sm text-slate-300 flex-1 truncate">{fileName}</span>
-          <button onClick={() => { setFileName(''); }} className="text-slate-500 hover:text-slate-300">
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-      )}
-
       {/* Title Input */}
-      <div className="mb-3">
+      <div className="mb-4">
+        <label className="block text-xs font-bold text-text-secondary mb-1.5 uppercase tracking-wider">Document Title</label>
         <input
           type="text"
-          placeholder="Document title (optional)"
+          placeholder="e.g. API Integration Guide"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           disabled={isAnalyzing}
-          className="w-full px-4 py-2.5 rounded-lg bg-slate-900/60 border border-slate-700/50 text-slate-200 placeholder-slate-500 text-sm focus-ring transition-all"
+          className="w-full px-4 py-2.5 rounded-lg bg-surface border border-border text-text-primary placeholder-text-muted/60 text-sm focus-ring transition-all"
         />
       </div>
 
       {/* Text Area */}
-      <div className="relative mb-4">
+      <div className="relative mb-5">
+        <label className="block text-xs font-bold text-text-secondary mb-1.5 uppercase tracking-wider">Document Content</label>
         <textarea
-          placeholder="Paste or type your text here..."
+          placeholder="Paste or type document text here, or upload a file above..."
           value={text}
           onChange={(e) => setText(e.target.value)}
           disabled={isAnalyzing}
-          rows={10}
-          className="w-full px-4 py-3 rounded-lg bg-slate-900/60 border border-slate-700/50 text-slate-200 placeholder-slate-500 text-sm leading-relaxed resize-y focus-ring transition-all scrollbar-hidden"
+          rows={8}
+          className="w-full px-4 py-3 rounded-lg bg-surface border border-border text-text-primary placeholder-text-muted/60 text-sm leading-relaxed resize-y focus-ring transition-all scrollbar-hidden"
         />
         {text && (
-          <span className="absolute bottom-3 right-3 text-xs text-slate-500 font-mono bg-slate-900/80 px-2 py-1 rounded">
+          <span className="absolute bottom-3 right-3 text-xs text-text-secondary font-mono bg-surface border border-border px-2 py-1 rounded">
             {text.length.toLocaleString()} chars
           </span>
         )}
       </div>
 
+      {/* Settings Panel */}
+      <div className="rounded-xl bg-surface-secondary border border-border mb-5 overflow-hidden">
+        <button
+          type="button"
+          onClick={() => setShowSettings(!showSettings)}
+          className="w-full px-4 py-3 flex items-center justify-between text-sm font-semibold text-text-secondary hover:bg-surface-hover transition-all"
+        >
+          <span className="flex items-center gap-2">
+            <Settings className="w-4 h-4 text-text-muted" />
+            Audit Settings & AI Engine
+          </span>
+          <span className="text-xs text-text-muted hover:underline">
+            {showSettings ? 'Hide Settings' : 'Configure Settings'}
+          </span>
+        </button>
+
+        {showSettings && (
+          <div className="px-4 pb-4 border-t border-border pt-4 space-y-4">
+            <div className="flex flex-col sm:flex-row gap-3">
+              {/* Radio Toggles */}
+              <label className={`flex-1 p-3 rounded-lg border cursor-pointer transition-all flex items-start gap-3 ${
+                engine === 'local' 
+                  ? 'border-primary bg-primary-soft text-text-primary' 
+                  : 'border-border bg-surface hover:bg-surface-hover'
+              }`}>
+                <input
+                  type="radio"
+                  name="engine"
+                  checked={engine === 'local'}
+                  onChange={() => setEngine('local')}
+                  className="mt-1 accent-primary"
+                />
+                <div>
+                  <span className="text-xs font-bold block">Local Rules Engine</span>
+                  <span className="text-[11px] text-text-muted block mt-0.5">Runs offline in your browser. Audit sections, readability, and consistency checks.</span>
+                </div>
+              </label>
+
+              <label className={`flex-1 p-3 rounded-lg border cursor-pointer transition-all flex items-start gap-3 ${
+                engine === 'gemini' 
+                  ? 'border-primary bg-primary-soft text-text-primary' 
+                  : 'border-border bg-surface hover:bg-surface-hover'
+              }`}>
+                <input
+                  type="radio"
+                  name="engine"
+                  checked={engine === 'gemini'}
+                  onChange={() => setEngine('gemini')}
+                  className="mt-1 accent-primary"
+                />
+                <div>
+                  <span className="text-xs font-bold block flex items-center gap-1.5">
+                    Gemini AI Engine
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-primary text-white dark:text-slate-900 leading-none">AI</span>
+                  </span>
+                  <span className="text-[11px] text-text-muted block mt-0.5">Use Google Gemini API for deep contextual feedback and English-only translations.</span>
+                </div>
+              </label>
+            </div>
+
+            {engine === 'gemini' && (
+              <div className="bg-surface p-3.5 rounded-lg border border-border animate-slide-up">
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-xs font-bold text-text-secondary block uppercase tracking-wider">Gemini API Key</label>
+                  <a
+                    href="https://aistudio.google.com/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[11px] text-primary hover:underline hover:text-primary-hover flex items-center gap-1"
+                  >
+                    <HelpCircle className="w-3.5 h-3.5" /> Get API Key
+                  </a>
+                </div>
+                <div className="relative">
+                  <input
+                    type={showKey ? 'text' : 'password'}
+                    placeholder="AIzaSy..."
+                    value={apiKey}
+                    onChange={(e) => setApiKey(e.target.value)}
+                    className="w-full pl-3 pr-10 py-2 rounded bg-surface border border-border text-text-primary placeholder-text-muted/60 text-xs focus-ring"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowKey(!showKey)}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-primary"
+                  >
+                    {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+                <div className="flex items-center gap-2 mt-2 text-[10px] text-text-muted">
+                  <ShieldCheck className="w-3.5 h-3.5 text-success animate-pulse-custom" />
+                  <span>Key is stored only locally in your browser's localStorage and sent directly to Google APIs.</span>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
       {error && (
-        <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm mb-4 animate-slide-up">
-          <AlertCircle className="w-4 h-4 flex-shrink-0" />
-          {error}
+        <div className="flex items-start gap-2.5 px-4 py-3 rounded-lg bg-danger/10 border border-danger/25 text-danger text-sm mb-4 animate-slide-up">
+          <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+          <span className="font-semibold">{error}</span>
         </div>
       )}
 
@@ -211,18 +412,18 @@ export function DocumentInput({ onAnalyze, isAnalyzing }: DocumentInputProps) {
       <div className="flex items-center gap-3 mb-6">
         <button
           onClick={handleAnalyze}
-          disabled={isAnalyzing || text.trim().length < 10}
-          className="flex-1 px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium text-sm hover:from-blue-400 hover:to-cyan-400 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
+          disabled={isAnalyzing || isExtracting || text.trim().length < 10}
+          className="flex-1 px-6 py-3 rounded-lg bg-primary hover:bg-primary-hover text-white font-semibold text-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
         >
           {isAnalyzing ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin-slow" />
-              Analyzing...
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Auditing Documentation...
             </>
           ) : (
             <>
               <Sparkles className="w-4 h-4" />
-              Analyze Document
+              Run Documentation Audit
             </>
           )}
         </button>
@@ -230,7 +431,7 @@ export function DocumentInput({ onAnalyze, isAnalyzing }: DocumentInputProps) {
           <button
             onClick={clearAll}
             disabled={isAnalyzing}
-            className="px-4 py-3 rounded-lg bg-slate-800/60 border border-slate-700/50 text-slate-400 hover:text-slate-200 hover:border-slate-600 disabled:opacity-40 transition-all text-sm"
+            className="px-4 py-3 rounded-lg bg-surface border border-border text-text-secondary hover:bg-surface-hover disabled:opacity-40 transition-all text-sm font-semibold"
           >
             Clear
           </button>
@@ -238,15 +439,15 @@ export function DocumentInput({ onAnalyze, isAnalyzing }: DocumentInputProps) {
       </div>
 
       {/* Sample texts */}
-      <div className="border-t border-slate-800 pt-6">
-        <p className="text-xs text-slate-500 mb-3 text-center">Or try a sample document:</p>
-        <div className="flex flex-wrap gap-2 justify-center">
-          {SAMPLE_TEXTS.map((sample) => (
+      <div className="border-t border-border pt-6">
+        <p className="text-xs text-text-muted mb-3 text-center uppercase tracking-wider font-bold">Or try a sample documentation draft:</p>
+        <div className="flex flex-col sm:flex-row gap-2.5 justify-center">
+          {SAMPLE_DOCS.map((sample) => (
             <button
               key={sample.title}
               onClick={() => loadSample(sample)}
               disabled={isAnalyzing}
-              className="px-3 py-1.5 rounded-lg bg-slate-800/40 border border-slate-700/40 text-slate-400 hover:text-blue-400 hover:border-blue-500/40 hover:bg-blue-500/10 disabled:opacity-40 transition-all text-xs font-medium"
+              className="px-4 py-2.5 rounded-lg bg-surface hover:bg-surface-hover text-text-secondary border border-border hover:border-border-strong disabled:opacity-40 transition-all text-xs font-bold text-left sm:text-center flex-1"
             >
               {sample.title}
             </button>

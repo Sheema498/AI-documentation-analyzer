@@ -76,6 +76,65 @@ export interface WordFrequencyBucket {
   count: number;
 }
 
+// --- New Documentation Quality Analysis Types ---
+
+export interface DocIssue {
+  id: string;
+  severity: 'critical' | 'high' | 'medium' | 'low';
+  category: 'clarity' | 'completeness' | 'structure' | 'readability' | 'consistency' | 'technical';
+  title: string;
+  description: string;
+  location: string;
+  recommendation: string;
+}
+
+export interface SectionAnalysis {
+  heading: string;
+  level: number;
+  quality: 'excellent' | 'good' | 'fair' | 'poor';
+  problems: string[];
+  suggestions: string[];
+}
+
+export interface ScoreBreakdown {
+  overall: number;
+  clarity: number;
+  completeness: number;
+  structure: number;
+  readability: number;
+  consistency: number;
+  technical: number;
+}
+
+export interface DocOverview {
+  title: string;
+  type: string;
+  wordCount: number;
+  sectionsCount: number;
+  summary: string;
+}
+
+export interface DocumentationAnalysis {
+  overview: DocOverview;
+  score: ScoreBreakdown;
+  executiveSummary: string;
+  strengths: string[];
+  issues: DocIssue[];
+  recommendations: string[];
+  sections: SectionAnalysis[];
+  readabilityAssessment: {
+    wordCount: number;
+    sentenceCount: number;
+    avgSentenceLength: number;
+    readabilityScore: number;
+    readabilityLabel: string;
+    readabilityDescription: string;
+    simplificationAreas: string[];
+  };
+  analyzedAt: string;
+  engineUsed: 'local' | 'gemini';
+}
+
 export interface AnalysisResult {
   stats: TextStats;
   readability: ReadabilityResult;
@@ -89,6 +148,7 @@ export interface AnalysisResult {
   sentenceLengthDistribution: WordFrequencyBucket[];
   topWords: { word: string; count: number }[];
   analyzedAt: string;
+  docAnalysis?: DocumentationAnalysis; // Make it optional for backward compatibility
 }
 
 export interface SavedDocument {

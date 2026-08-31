@@ -15,7 +15,7 @@ export function BarChart({ data, height = 200, showValues = true, unit = '' }: B
         return (
           <div key={i} className="flex flex-1 flex-col items-center gap-2">
             {showValues && (
-              <span className="text-xs text-slate-400 font-mono tabular-nums">
+              <span className="text-xs text-text-muted font-mono tabular-nums">
                 {item.value}{unit}
               </span>
             )}
@@ -23,11 +23,11 @@ export function BarChart({ data, height = 200, showValues = true, unit = '' }: B
               className="w-full rounded-t-md transition-all duration-700 ease-out animate-draw-bar"
               style={{
                 height: barHeight,
-                background: item.color || 'linear-gradient(180deg, #3b82f6, #1d4ed8)',
+                background: item.color || 'var(--primary)',
                 animationDelay: `${i * 60}ms`,
               }}
             />
-            <span className="text-[10px] text-slate-500 text-center leading-tight">
+            <span className="text-[10px] text-text-secondary text-center leading-tight font-medium">
               {item.label}
             </span>
           </div>
@@ -50,16 +50,17 @@ export function HorizontalBar({ label, value, max, color, unit = '' }: Horizonta
 
   return (
     <div className="flex items-center gap-3">
-      <span className="text-sm text-slate-300 w-24 truncate text-right">{label}</span>
-      <div className="flex-1 h-6 bg-slate-800/60 rounded-md overflow-hidden">
+      {/* Widened to 32 (128px) and aligned left to prevent truncation of "Technical Quality" */}
+      <span className="text-xs font-bold text-text-secondary w-32 truncate text-left">{label}</span>
+      <div className="flex-1 h-5 bg-surface-secondary border border-border rounded-md overflow-hidden">
         <div
           className="h-full rounded-md transition-all duration-700 ease-out flex items-center justify-end pr-2"
           style={{
             width: `${pct}%`,
-            background: color || 'linear-gradient(90deg, #3b82f6, #06b6d4)',
+            background: color || 'var(--primary)',
           }}
         >
-          <span className="text-[10px] text-white font-mono font-semibold tabular-nums">
+          <span className="text-[9px] text-white font-mono font-bold tabular-nums">
             {value}{unit}
           </span>
         </div>
@@ -96,7 +97,7 @@ export function DonutChart({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#1e293b"
+          stroke="var(--border)"
           strokeWidth={thickness}
         />
         {segments.map((seg, i) => {
@@ -124,10 +125,10 @@ export function DonutChart({
       {(centerLabel || centerValue) && (
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           {centerValue && (
-            <span className="text-2xl font-bold font-mono tabular-nums">{centerValue}</span>
+            <span className="text-xl font-bold font-mono text-text-primary tabular-nums">{centerValue}</span>
           )}
           {centerLabel && (
-            <span className="text-xs text-slate-400 mt-0.5">{centerLabel}</span>
+            <span className="text-xs text-text-muted mt-0.5">{centerLabel}</span>
           )}
         </div>
       )}
@@ -146,7 +147,7 @@ interface GaugeProps {
 export function Gauge({ value, min = 0, max = 100, label, color }: GaugeProps) {
   const pct = Math.min(Math.max((value - min) / (max - min), 0), 1);
   const angle = pct * 180 - 90;
-  const arcColor = color || (pct > 0.66 ? '#10b981' : pct > 0.33 ? '#f59e0b' : '#ef4444');
+  const arcColor = color || 'var(--primary)';
 
   return (
     <div className="flex flex-col items-center">
@@ -155,7 +156,7 @@ export function Gauge({ value, min = 0, max = 100, label, color }: GaugeProps) {
           <path
             d="M 8 72 A 56 56 0 0 1 120 72"
             fill="none"
-            stroke="#1e293b"
+            stroke="var(--border)"
             strokeWidth="8"
             strokeLinecap="round"
           />
@@ -173,16 +174,18 @@ export function Gauge({ value, min = 0, max = 100, label, color }: GaugeProps) {
             y1="72"
             x2={64 + 48 * Math.cos((angle - 90) * Math.PI / 180)}
             y2={72 + 48 * Math.sin((angle - 90) * Math.PI / 180)}
-            stroke="#e2e8f0"
-            strokeWidth="2"
+            stroke="var(--text-primary)"
+            strokeWidth="2.5"
             strokeLinecap="round"
             className="transition-all duration-1000 ease-out"
           />
-          <circle cx="64" cy="72" r="4" fill="#e2e8f0" />
+          <circle cx="64" cy="72" r="4.5" fill="var(--text-primary)" />
         </svg>
       </div>
-      <span className="text-xl font-bold font-mono tabular-nums -mt-2">{value.toFixed(1)}</span>
-      {label && <span className="text-xs text-slate-400 mt-0.5">{label}</span>}
+      <span className="text-2xl font-black font-mono text-text-primary tabular-nums -mt-2">
+        {value.toFixed(1)}
+      </span>
+      {label && <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider mt-0.5">{label}</span>}
     </div>
   );
 }
@@ -199,8 +202,8 @@ export function WordCloud({ words, maxItems = 30 }: WordCloudProps) {
 
   const sizes = ['text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl'];
   const colors = [
-    'text-slate-500', 'text-slate-400', 'text-blue-400', 'text-blue-300',
-    'text-cyan-400', 'text-cyan-300', 'text-blue-200',
+    'text-text-muted', 'text-text-secondary', 'text-primary/70', 'text-primary/80',
+    'text-primary/90', 'text-primary', 'text-primary',
   ];
 
   return (
@@ -212,7 +215,7 @@ export function WordCloud({ words, maxItems = 30 }: WordCloudProps) {
         return (
           <span
             key={i}
-            className={`${sizes[sizeIdx]} ${colors[colorIdx]} font-medium transition-all duration-300 hover:scale-110 cursor-default animate-fade-in`}
+            className={`${sizes[sizeIdx]} ${colors[colorIdx]} font-semibold transition-all duration-305 hover:scale-110 cursor-default animate-fade-in`}
             style={{ animationDelay: `${i * 20}ms`, opacity: 0 }}
             title={`${item.word}: ${item.count} occurrences`}
           >
