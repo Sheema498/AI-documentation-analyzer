@@ -152,6 +152,13 @@ export function DocumentInput({
     onAnalyze(text, title || 'Untitled Document');
   };
 
+  const handleTextKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter' && !isAnalyzing && !isExtracting) {
+      event.preventDefault();
+      handleAnalyze();
+    }
+  };
+
   const loadSample = (sample: { title: string; text: string }) => {
     setText(sample.text);
     setTitle(sample.title);
@@ -291,10 +298,12 @@ export function DocumentInput({
           placeholder="Paste or type document text here, or upload a file above..."
           value={text}
           onChange={(e) => setText(e.target.value)}
+          onKeyDown={handleTextKeyDown}
           disabled={isAnalyzing}
           rows={8}
           className="w-full px-4 py-3 rounded-lg bg-surface border border-border text-text-primary placeholder-text-muted/60 text-sm leading-relaxed resize-y focus-ring transition-all scrollbar-hidden"
         />
+        <p className="mt-1.5 text-[11px] text-text-muted">Tip: press Ctrl + Enter (or ⌘ + Enter) to run an audit.</p>
         {text && (
           <span className="absolute bottom-3 right-3 text-xs text-text-secondary font-mono bg-surface border border-border px-2 py-1 rounded">
             {text.length.toLocaleString()} chars
