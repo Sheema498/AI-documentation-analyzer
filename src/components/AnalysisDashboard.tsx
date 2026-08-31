@@ -5,7 +5,7 @@ import { BarChart, HorizontalBar, DonutChart, Gauge, WordCloud } from './Charts'
 import {
   FileText, Type, Hash, AlignLeft, BookOpen, Clock,
   Mic, Gauge as GaugeIcon, TrendingUp, Languages, Sparkles, BarChart3,
-  CheckCircle2, AlertCircle, Info,
+  CheckCircle2, Info,
 } from 'lucide-react';
 
 interface AnalysisDashboardProps {

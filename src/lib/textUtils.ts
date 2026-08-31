@@ -1,3 +1,5 @@
+import { SYLLABLES_DATA } from './data/syllables';
+
 const STOP_WORDS = new Set([
   'a', 'an', 'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
   'of', 'with', 'by', 'from', 'is', 'was', 'are', 'were', 'be', 'been',
@@ -70,11 +72,14 @@ export function splitParagraphs(text: string): string[] {
 }
 
 export function countSyllables(word: string): number {
-  word = word.toLowerCase().replace(/[^a-z]/g, '');
-  if (word.length <= 3) return 1;
-  word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '');
-  word = word.replace(/^y/, '');
-  const matches = word.match(/[aeiouy]{1,2}/g);
+  const w = word.toLowerCase().replace(/[^a-z]/g, '');
+  if (SYLLABLES_DATA[w as keyof typeof SYLLABLES_DATA] !== undefined) {
+    return SYLLABLES_DATA[w as keyof typeof SYLLABLES_DATA];
+  }
+  if (w.length <= 3) return 1;
+  const wordCleaned = w.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '');
+  const wordCleaned2 = wordCleaned.replace(/^y/, '');
+  const matches = wordCleaned2.match(/[aeiouy]{1,2}/g);
   return matches ? matches.length : 1;
 }
 

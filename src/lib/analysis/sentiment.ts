@@ -1,5 +1,6 @@
 import type { SentimentResult, SentimentLabel } from '@/types';
 import { tokenize, round } from '../textUtils';
+import { SENTIMENT_LEXICON } from '../data/sentimentLexicon';
 
 const POSITIVE_WORDS = new Set([
   'good', 'great', 'excellent', 'amazing', 'wonderful', 'fantastic',
@@ -158,23 +159,23 @@ export function analyzeSentiment(text: string): SentimentResult {
     if (INTENSIFIERS.has(prevWord)) multiplier *= 1.5;
     if (INTENSIFIERS.has(prevPrevWord) && NEGATORS.has(prevWord)) multiplier = -1.5;
 
+    let wordScore = 0;
     if (POSITIVE_WORDS.has(word)) {
-      const score = 1 * multiplier;
+      wordScore = 1;
+    } else if (NEGATIVE_WORDS.has(word)) {
+      wordScore = -1;
+    } else if (SENTIMENT_LEXICON[word as keyof typeof SENTIMENT_LEXICON] !== undefined) {
+      wordScore = SENTIMENT_LEXICON[word as keyof typeof SENTIMENT_LEXICON];
+    }
+
+    if (wordScore !== 0) {
+      const score = wordScore * multiplier;
       if (score > 0) {
         positiveScore += score;
         positiveWords.push(word);
       } else {
         negativeScore += Math.abs(score);
         negativeWords.push(word);
-      }
-    } else if (NEGATIVE_WORDS.has(word)) {
-      const score = 1 * multiplier;
-      if (score > 0) {
-        negativeScore += score;
-        negativeWords.push(word);
-      } else {
-        positiveScore += Math.abs(score);
-        positiveWords.push(word);
       }
     }
   }

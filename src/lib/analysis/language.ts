@@ -1,10 +1,5 @@
 import type { LanguageResult } from '@/types';
 
-interface LanguageProfile {
-  name: string;
-  trigrams: Set<string>;
-  commonWords: string[];
-}
 
 function buildTrigrams(text: string): Map<string, number> {
   const cleanText = text.toLowerCase().replace(/[^a-zà-ÿ\s]/g, ' ');

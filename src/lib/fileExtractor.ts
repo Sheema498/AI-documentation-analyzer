@@ -160,7 +160,6 @@ async function extractDocxText(file: File): Promise<string> {
 async function decompressDocx(arrayBuffer: ArrayBuffer): Promise<string> {
   const bytes = new Uint8Array(arrayBuffer);
 
-  const docXmlEntries: Uint8Array[] = [];
   let i = 0;
 
   while (i < bytes.length - 4) {

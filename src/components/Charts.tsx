@@ -11,7 +11,6 @@ export function BarChart({ data, height = 200, showValues = true, unit = '' }: B
   return (
     <div className="flex items-end justify-between gap-2" style={{ height }}>
       {data.map((item, i) => {
-        const pct = (item.value / max) * 100;
         const barHeight = Math.max((item.value / max) * (height - 40), 2);
         return (
           <div key={i} className="flex flex-1 flex-col items-center gap-2">

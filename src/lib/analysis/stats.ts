@@ -15,10 +15,6 @@ export function computeStats(text: string): TextStats {
     '',
   );
 
-  const totalSyllables = words.reduce((sum, w) => {
-    return sum + Math.max(1, (w.match(/[aeiouy]{1,2}/g) || []).length);
-  }, 0);
-
   const wordCount = words.length;
   const sentenceCount = Math.max(sentences.length, 1);
   const paragraphCount = Math.max(paragraphs.length, 1);
