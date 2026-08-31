@@ -1,4 +1,6 @@
-# Document Text Analyzer
+# DocuLint Documentation Auditor
+
+DocuLint is a client-side documentation audit tool for technical manuals, API guides, READMEs, and product requirements documents.
 
 A modern, client-side web application for comprehensive text and document analysis. Analyze any text for sentiment, readability, keywords, key phrases, language detection, summaries, and detailed statistics — all running entirely in the browser.
 
@@ -92,6 +94,12 @@ src/
 3. Click **Analyze**.
 4. Explore the interactive dashboard: stats, sentiment gauge, readability scores, keyword cloud, summary, and charts.
 5. Optionally save the analysis to local history for later review.
+
+### Choosing an audit engine
+
+The **Local Rules Engine** works offline and does not require an API key. Use it for fast checks of structure, readability, and consistency.
+
+For contextual feedback, open **Audit Settings & AI Engine**, select **Gemini AI Engine**, and provide a Gemini API key. The key remains in your browser storage and is sent directly to Google's API only when an audit runs.
 
 ## Scripts Reference
 
