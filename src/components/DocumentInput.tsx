@@ -83,6 +83,8 @@ export function DocumentInput({
   const [showKey, setShowKey] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+  const readingMinutes = Math.max(1, Math.ceil(wordCount / 200));
 
   const handleFile = useCallback(async (file: File) => {
     setError('');
@@ -296,8 +298,8 @@ export function DocumentInput({
           className="w-full px-4 py-3 rounded-lg bg-surface border border-border text-text-primary placeholder-text-muted/60 text-sm leading-relaxed resize-y focus-ring transition-all scrollbar-hidden"
         />
         {text && (
-          <span className="absolute bottom-3 right-3 text-xs text-text-secondary font-mono bg-surface border border-border px-2 py-1 rounded">
-            {text.length.toLocaleString()} chars
+          <span className="absolute bottom-3 right-3 text-xs text-text-secondary font-mono bg-surface border border-border px-2 py-1 rounded" aria-live="polite">
+            {wordCount.toLocaleString()} words · {text.length.toLocaleString()} chars · ~{readingMinutes} min read
           </span>
         )}
       </div>
