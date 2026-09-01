@@ -213,6 +213,7 @@ function App() {
             <nav className="flex items-center gap-1 sm:gap-2">
               <button
                 onClick={() => setView('input')}
+                aria-current={view === 'input' || view === 'results' ? 'page' : undefined}
                 className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
                   view === 'input' || view === 'results'
                     ? 'text-primary font-black bg-primary-soft'
@@ -224,6 +225,7 @@ function App() {
 
               <button
                 onClick={() => setView('history')}
+                aria-current={view === 'history' ? 'page' : undefined}
                 className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all relative ${
                   view === 'history'
                     ? 'text-primary font-black bg-primary-soft'
@@ -233,6 +235,7 @@ function App() {
                 History
                 {history.length > 0 && (
                   <span className="absolute -top-1 -right-1 px-1.5 py-0.5 rounded-full bg-primary text-white text-[8px] font-black leading-none">
+                  <span aria-label={`${history.length} saved audits`} className="absolute -top-1 -right-1 px-1.5 py-0.5 rounded-full bg-primary text-white dark:text-slate-900 text-[8px] font-black leading-none">
                     {history.length}
                   </span>
                 )}
@@ -240,6 +243,7 @@ function App() {
 
               <button
                 onClick={() => setView('about')}
+                aria-current={view === 'about' ? 'page' : undefined}
                 className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
                   view === 'about'
                     ? 'text-primary font-black bg-primary-soft'
