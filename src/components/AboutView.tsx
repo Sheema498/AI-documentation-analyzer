@@ -9,8 +9,8 @@ export function AboutView({ onBack }: AboutViewProps) {
     <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-border pb-4">
-        <div className="flex items-center gap-2">
-          <HelpCircle className="w-5 h-5 text-primary" />
+        <div className="flex items-center gap-2.5">
+          <img src="/logo.png" alt="DocuLint Logo" className="w-6 h-6 object-contain" />
           <h2 className="text-lg font-bold text-text-primary">About & Quality Guidelines</h2>
         </div>
         <button
@@ -25,8 +25,8 @@ export function AboutView({ onBack }: AboutViewProps) {
       {/* Intro */}
       <div className="p-5 rounded-xl bg-surface border border-border space-y-3 shadow-sm">
         <h3 className="text-sm font-bold text-text-primary flex items-center gap-2">
-          <Sparkles className="w-4.5 h-4.5 text-primary" />
-          What is DocuLint?
+          <img src="/logo.png" alt="DocuLint" className="w-5 h-5 object-contain" />
+          What is DocuLint QA Auditor?
         </h3>
         <p className="text-xs text-text-secondary leading-relaxed">
           DocuLint is a professional quality assurance tool for product, technical, and corporate documentation. It scans drafts for structural gaps, missing sections, readability issues, spelling variants, and unformatted code blocks. It runs completely inside your browser, ensuring absolute privacy.

@@ -186,17 +186,24 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
           <button
             onClick={handleBack}
-            className="flex items-center gap-2.5 group focus:outline-none"
+            className="flex items-center gap-3 group focus:outline-none text-left"
           >
-            <div className="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-extrabold shadow-sm">
-              <FileSearch className="w-4.5 h-4.5" />
-            </div>
-            <div className="text-left leading-none">
-              <h1 className="text-xs font-black text-text-primary uppercase tracking-wider">
-                DocuLint
-              </h1>
-              <p className="text-[8px] font-extrabold text-text-muted uppercase tracking-widest mt-0.5">
-                QA Auditor
+            <img
+              src="/logo.png"
+              alt="DocuLint QA Auditor"
+              className="w-8 h-8 object-contain transition-transform duration-200 group-hover:scale-105"
+            />
+            <div className="text-left leading-tight">
+              <div className="flex items-center gap-1.5">
+                <span className="text-sm font-black text-text-primary uppercase tracking-wider">
+                  DocuLint
+                </span>
+                <span className="px-1.5 py-0.5 rounded text-[8px] font-extrabold bg-primary/10 text-primary border border-primary/20">
+                  AUDITOR
+                </span>
+              </div>
+              <p className="text-[9px] font-semibold text-text-muted uppercase tracking-widest mt-0.5">
+                Quality Assurance
               </p>
             </div>
           </button>
@@ -227,6 +234,7 @@ function App() {
               >
                 History
                 {history.length > 0 && (
+                  <span className="absolute -top-1 -right-1 px-1.5 py-0.5 rounded-full bg-primary text-white text-[8px] font-black leading-none">
                   <span aria-label={`${history.length} saved audits`} className="absolute -top-1 -right-1 px-1.5 py-0.5 rounded-full bg-primary text-white dark:text-slate-900 text-[8px] font-black leading-none">
                     {history.length}
                   </span>
@@ -329,9 +337,12 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border mt-12 py-5 text-xs text-text-muted">
+      <footer className="border-t border-border mt-12 py-5 text-xs text-text-muted bg-surface/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <span>DocuLint &bull; Runs locally or securely via Google Gemini API in your browser</span>
+          <div className="flex items-center gap-2">
+            <img src="/logo.png" alt="DocuLint" className="w-4 h-4 object-contain" />
+            <span>DocuLint QA Auditor &bull; Runs locally or securely via Google Gemini API in your browser</span>
+          </div>
           {history.length > 0 && (
             <button
               onClick={handleClearHistory}
@@ -346,13 +357,15 @@ function App() {
 
       {/* Audit Checklist Loading Modal */}
       {isAnalyzing && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07111F]/70 dark:bg-[#07111F]/80 backdrop-blur-[1px]">
-          <div className="p-6 rounded-2xl bg-surface border border-border max-w-sm w-full mx-4 space-y-4 shadow-xl">
-            <div className="flex items-center gap-2.5">
-              <Loader2 className="w-5 h-5 text-primary animate-spin" />
-              <h3 className="text-sm font-bold text-text-primary">Auditing Documentation</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+          <div className="p-6 rounded-2xl bg-surface border border-border max-w-sm w-full mx-4 space-y-4 shadow-2xl">
+            <div className="flex items-center gap-3">
+              <img src="/logo.png" alt="Auditing" className="w-6 h-6 object-contain animate-pulse-custom" />
+              <div>
+                <h3 className="text-sm font-bold text-text-primary">Auditing Documentation</h3>
+                <p className="text-[10px] text-text-muted">Evaluating structure, syntax & completeness</p>
+              </div>
             </div>
-            <p className="text-[11px] text-text-muted leading-normal">Evaluating document structure, syntax, and completeness metrics.</p>
             
             <div className="space-y-2 pt-2 border-t border-border">
               <LoadingPhaseItem label="Reading document..." status={getPhaseStatus('reading')} />

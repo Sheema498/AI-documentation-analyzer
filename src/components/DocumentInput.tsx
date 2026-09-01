@@ -191,8 +191,11 @@ export function DocumentInput({
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="text-center mb-8 animate-fade-in">
-        <h1 className="text-3xl font-extrabold tracking-tight text-text-primary mb-2">
+      <div className="text-center mb-8 animate-fade-in flex flex-col items-center">
+        <div className="p-3 rounded-2xl bg-surface border border-border shadow-sm mb-3">
+          <img src="/logo.png" alt="DocuLint QA Logo" className="w-12 h-12 object-contain" />
+        </div>
+        <h1 className="text-3xl font-black tracking-tight text-text-primary mb-2">
           Documentation Auditor
         </h1>
         <p className="text-text-secondary max-w-lg mx-auto text-sm leading-relaxed">
@@ -217,7 +220,7 @@ export function DocumentInput({
             }
           }
         }}
-        className={`relative rounded-xl border-2 border-dashed transition-all duration-200 mb-4 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-[#07111F] ${
+        className={`relative rounded-xl border-2 border-dashed transition-all duration-200 mb-4 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-[#0D0D0D] ${
           isDragging
             ? 'border-primary bg-primary-soft scale-[1.005]'
             : 'border-border bg-surface-secondary hover:border-border-strong hover:bg-surface-hover'
@@ -366,7 +369,7 @@ export function DocumentInput({
                 <div>
                   <span className="text-xs font-bold block flex items-center gap-1.5">
                     Gemini AI Engine
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-primary text-white dark:text-slate-900 leading-none">AI</span>
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-primary text-white leading-none">AI</span>
                   </span>
                   <span className="text-[11px] text-text-muted block mt-0.5">Use Google Gemini API for deep contextual feedback and English-only translations.</span>
                 </div>

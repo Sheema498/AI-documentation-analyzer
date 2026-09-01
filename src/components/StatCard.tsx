@@ -11,7 +11,7 @@ interface StatCardProps {
   delay?: number;
 }
 
-export function StatCard({ icon, label, value, decimals = 0, suffix = '', color = '#3b82f6', delay = 0 }: StatCardProps) {
+export function StatCard({ icon, label, value, decimals = 0, suffix = '', color = 'var(--primary)', delay = 0 }: StatCardProps) {
   return (
     <div
       className="glass card-hover rounded-xl p-4 animate-slide-up"
@@ -25,10 +25,10 @@ export function StatCard({ icon, label, value, decimals = 0, suffix = '', color 
           {icon}
         </div>
       </div>
-      <div className="text-2xl font-bold text-slate-100">
+      <div className="text-2xl font-bold text-text-primary">
         <AnimatedNumber value={value} decimals={decimals} suffix={suffix} />
       </div>
-      <div className="text-xs text-slate-400 mt-1">{label}</div>
+      <div className="text-xs text-text-muted mt-1">{label}</div>
     </div>
   );
 }
@@ -48,8 +48,8 @@ export function InfoCard({ title, icon, children, className = '', delay = 0 }: I
       style={{ animationDelay: `${delay}ms`, opacity: 0 }}
     >
       <div className="flex items-center gap-2 mb-4">
-        <span className="text-blue-400">{icon}</span>
-        <h3 className="text-sm font-semibold text-slate-200 uppercase tracking-wide">{title}</h3>
+        <span className="text-primary">{icon}</span>
+        <h3 className="text-sm font-semibold text-text-primary uppercase tracking-wide">{title}</h3>
       </div>
       {children}
     </div>
