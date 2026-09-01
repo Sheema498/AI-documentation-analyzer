@@ -20,8 +20,8 @@ export function HistoryPanel({ documents, onSelect, onDelete, onClear, onClose }
     <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-border pb-4">
-        <div className="flex items-center gap-2">
-          <Clock className="w-5 h-5 text-text-muted" />
+        <div className="flex items-center gap-2.5">
+          <img src="/logo.png" alt="DocuLint Logo" className="w-5 h-5 object-contain" />
           <h2 className="text-lg font-bold text-text-primary">Audit History</h2>
         </div>
         <div className="flex items-center gap-2">
@@ -45,7 +45,7 @@ export function HistoryPanel({ documents, onSelect, onDelete, onClear, onClose }
 
       {documents.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center px-6 rounded-xl bg-surface border border-border shadow-sm">
-          <AlertCircle className="w-10 h-10 text-text-muted mb-3" />
+          <img src="/logo.png" alt="DocuLint" className="w-12 h-12 object-contain opacity-70 mb-3" />
           <h3 className="text-sm font-bold text-text-primary">No analyses yet</h3>
           <p className="text-xs text-text-secondary mt-1 max-w-xs leading-relaxed">
             Upload a document to create your first analysis report.
@@ -73,9 +73,9 @@ export function HistoryPanel({ documents, onSelect, onDelete, onClear, onClose }
                 className="group p-4 rounded-xl bg-surface border border-border hover:border-border-strong hover:bg-surface-hover cursor-pointer transition-all flex items-start gap-4 shadow-sm"
               >
                 {/* Score badge */}
-                <div className="flex-shrink-0 w-12 h-12 rounded-full border-2 border-primary bg-primary-soft text-primary flex flex-col items-center justify-center">
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl border border-primary/30 bg-primary-soft text-primary flex flex-col items-center justify-center">
                   <span className="text-sm font-extrabold">{score}</span>
-                  <span className="text-[7px] font-bold uppercase tracking-wider leading-none text-primary/80">Score</span>
+                  <span className="text-[7px] font-bold uppercase tracking-wider leading-none text-primary/90">Score</span>
                 </div>
 
                 <div className="flex-1 min-w-0">

@@ -37,7 +37,7 @@ export function SentimentIndicator({ sentiment }: SentimentIndicatorProps) {
   const negPct = 100 - posPct;
 
   return (
-    <div className={`rounded-xl p-5 bg-gradient-to-br ${c.bg} border border-slate-700/50`}>
+    <div className={`rounded-xl p-5 bg-surface border border-border`}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div
@@ -48,7 +48,7 @@ export function SentimentIndicator({ sentiment }: SentimentIndicatorProps) {
           </div>
           <div>
             <div className="text-lg font-bold" style={{ color: c.color }}>{c.text}</div>
-            <div className="text-xs text-slate-400">
+            <div className="text-xs text-text-muted">
               Confidence: {Math.round(confidence * 100)}%
             </div>
           </div>
@@ -57,22 +57,22 @@ export function SentimentIndicator({ sentiment }: SentimentIndicatorProps) {
           <div className="text-2xl font-bold font-mono tabular-nums" style={{ color: c.color }}>
             {score > 0 ? '+' : ''}{score.toFixed(3)}
           </div>
-          <div className="text-xs text-slate-400">Sentiment Score</div>
+          <div className="text-xs text-text-muted">Sentiment Score</div>
         </div>
       </div>
 
       <div className="space-y-2">
         <div className="flex items-center justify-between text-xs">
-          <span className="text-emerald-400 font-medium">{positiveCount} positive</span>
-          <span className="text-red-400 font-medium">{negativeCount} negative</span>
+          <span className="text-success font-medium">{positiveCount} positive</span>
+          <span className="text-danger font-medium">{negativeCount} negative</span>
         </div>
-        <div className="h-3 rounded-full overflow-hidden flex bg-slate-800">
+        <div className="h-3 rounded-full overflow-hidden flex bg-surface-secondary border border-border">
           <div
-            className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all duration-700 ease-out"
+            className="h-full bg-success transition-all duration-700 ease-out"
             style={{ width: `${posPct}%` }}
           />
           <div
-            className="h-full bg-gradient-to-r from-red-400 to-red-500 transition-all duration-700 ease-out"
+            className="h-full bg-danger transition-all duration-700 ease-out"
             style={{ width: `${negPct}%` }}
           />
         </div>

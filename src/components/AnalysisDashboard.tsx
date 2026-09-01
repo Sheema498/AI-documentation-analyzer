@@ -117,28 +117,28 @@ ${sections.map(sec => `- **${sec.heading}** (Level ${sec.level}): Quality is **$
       border: 1px solid #D9E2EF;
     }
     header {
-      border-bottom: 2px solid #F1F5FB;
+      border-bottom: 2px solid #F1F5F9;
       padding-bottom: 24px;
       margin-bottom: 30px;
     }
-    h1 { font-size: 28px; margin: 0 0 8px 0; color: #172033; }
-    .meta { font-size: 13px; color: #52627A; margin: 0; }
+    h1 { font-size: 28px; margin: 0 0 8px 0; color: #0F172A; }
+    .meta { font-size: 13px; color: #475569; margin: 0; }
     .grid { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; margin-bottom: 30px; }
     .score-card {
       background: #FFFFFF;
-      color: #172033;
+      color: #0F172A;
       padding: 30px;
       border-radius: 12px;
       text-align: center;
-      border: 1px solid #D9E2EF;
+      border: 1px solid #E2E8F0;
     }
-    .score-num { font-size: 64px; font-weight: 800; line-height: 1; margin: 15px 0 5px 0; color: #2563EB; }
-    .score-label { font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; color: #718096; }
-    .score-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; font-size: 12px; color: #52627A; }
-    .progress-bg { width: 100%; height: 6px; border-radius: 3px; overflow: hidden; margin-top: 4px; background: #D9E2EF; }
-    .progress-fill { height: 100%; background: #2563EB; }
-    .card { background: #FFFFFF; border: 1px solid #D9E2EF; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
-    h2 { font-size: 18px; margin-top: 0; margin-bottom: 15px; color: #172033; border-left: 4px solid #2563EB; padding-left: 10px; }
+    .score-num { font-size: 64px; font-weight: 800; line-height: 1; margin: 15px 0 5px 0; color: #EA580C; }
+    .score-label { font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; color: #64748B; }
+    .score-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; font-size: 12px; color: #475569; }
+    .progress-bg { width: 100%; height: 6px; border-radius: 3px; overflow: hidden; margin-top: 4px; background: #E2E8F0; }
+    .progress-fill { height: 100%; background: #EA580C; }
+    .card { background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+    h2 { font-size: 18px; margin-top: 0; margin-bottom: 15px; color: #0F172A; border-left: 4px solid #EA580C; padding-left: 10px; }
     .badge {
       display: inline-block;
       padding: 3px 8px;
@@ -148,23 +148,23 @@ ${sections.map(sec => `- **${sec.heading}** (Level ${sec.level}): Quality is **$
       text-transform: uppercase;
       margin-right: 6px;
     }
-    .badge-critical { background: #fee2e2; color: #DC2626; }
-    .badge-high { background: #ffedd5; color: #D97706; }
-    .badge-medium { background: #fef9c3; color: #D97706; }
-    .badge-low { background: #E8F0FF; color: #2563EB; }
-    .badge-cat { background: #F8FAFD; color: #52627A; }
-    .issue-item { border-bottom: 1px solid #D9E2EF; padding: 15px 0; }
+    .badge-critical { background: #FEE2E2; color: #DC2626; }
+    .badge-high { background: #FFEDD5; color: #EA580C; }
+    .badge-medium { background: #FEF9C3; color: #D97706; }
+    .badge-low { background: #FFF7ED; color: #EA580C; }
+    .badge-cat { background: #F1F5F9; color: #475569; }
+    .issue-item { border-bottom: 1px solid #E2E8F0; padding: 15px 0; }
     .issue-item:last-child { border-bottom: none; }
     .issue-header { display: flex; align-items: center; justify-content: space-between; }
-    .issue-title { font-weight: 750; font-size: 15px; color: #172033; margin: 0; }
-    .issue-meta { font-size: 12px; color: #52627A; margin-top: 4px; }
-    .issue-desc { font-size: 13.5px; color: #52627A; margin: 8px 0; }
-    .issue-rec { background: #E8F0FF; border-left: 3px solid #2563EB; padding: 8px 12px; font-size: 13px; color: #172033; margin: 4px 0 0 0; }
+    .issue-title { font-weight: 750; font-size: 15px; color: #0F172A; margin: 0; }
+    .issue-meta { font-size: 12px; color: #475569; margin-top: 4px; }
+    .issue-desc { font-size: 13.5px; color: #475569; margin: 8px 0; }
+    .issue-rec { background: #FFF7ED; border-left: 3px solid #EA580C; padding: 8px 12px; font-size: 13px; color: #0F172A; margin: 4px 0 0 0; }
     ul { padding-left: 20px; margin: 0; }
-    li { margin-bottom: 8px; font-size: 14px; color: #52627A; }
+    li { margin-bottom: 8px; font-size: 14px; color: #475569; }
     table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { text-align: left; padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #D9E2EF; }
-    th { background: #F8FAFD; color: #52627A; font-weight: 600; }
+    th, td { text-align: left; padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #E2E8F0; }
+    th { background: #F1F5F9; color: #475569; font-weight: 600; }
   </style>
 </head>
 <body>
@@ -178,28 +178,28 @@ ${sections.map(sec => `- **${sec.heading}** (Level ${sec.level}): Quality is **$
       <div class="score-card">
         <div class="score-label">Overall Quality</div>
         <div class="score-num">${score.overall}</div>
-        <div style="font-size:12px; color:#718096;">out of 100 points</div>
+        <div style="font-size:12px; color:#64748B;">out of 100 points</div>
 
         <div style="margin-top:25px; text-align:left;">
           <div class="score-bar">
             <span>Clarity</span><span>${score.clarity}%</span>
           </div>
-          <div class="progress-bg"><div class="progress-fill" style="width:${score.clarity}%; background:#2563EB;"></div></div>
+          <div class="progress-bg"><div class="progress-fill" style="width:${score.clarity}%; background:#EA580C;"></div></div>
 
           <div class="score-bar" style="margin-top:8px;">
             <span>Completeness</span><span>${score.completeness}%</span>
           </div>
-          <div class="progress-bg"><div class="progress-fill" style="width:${score.completeness}%; background:#2563EB;"></div></div>
+          <div class="progress-bg"><div class="progress-fill" style="width:${score.completeness}%; background:#EA580C;"></div></div>
 
           <div class="score-bar" style="margin-top:8px;">
             <span>Structure</span><span>${score.structure}%</span>
           </div>
-          <div class="progress-bg"><div class="progress-fill" style="width:${score.structure}%; background:#2563EB;"></div></div>
+          <div class="progress-bg"><div class="progress-fill" style="width:${score.structure}%; background:#EA580C;"></div></div>
 
           <div class="score-bar" style="margin-top:8px;">
             <span>Technical Quality</span><span>${score.technical}%</span>
           </div>
-          <div class="progress-bg"><div class="progress-fill" style="width:${score.technical}%; background:#2563EB;"></div></div>
+          <div class="progress-bg"><div class="progress-fill" style="width:${score.technical}%; background:#EA580C;"></div></div>
         </div>
       </div>
 
@@ -287,8 +287,8 @@ ${sections.map(sec => `- **${sec.heading}** (Level ${sec.level}): Quality is **$
       {/* Overview Metadata Bar - Dynamic Theme Color System */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-4 rounded-xl bg-surface border border-border animate-fade-in shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-primary-soft border border-primary/20 text-primary flex items-center justify-center">
-            <FileText className="w-5 h-5" />
+          <div className="w-10 h-10 rounded-xl bg-surface-secondary border border-border flex items-center justify-center flex-shrink-0 p-1.5 shadow-sm">
+            <img src="/logo.png" alt="DocuLint" className="w-full h-full object-contain" />
           </div>
           <div>
             <h2 className="text-sm font-bold text-text-primary">{overview.title}</h2>
@@ -347,7 +347,7 @@ ${sections.map(sec => `- **${sec.heading}** (Level ${sec.level}): Quality is **$
           <ShieldAlert className="w-3.5 h-3.5" />
           Issues Audit
           {issues.length > 0 && (
-            <span className="ml-1.5 px-1.5 py-0.5 rounded-full text-[9px] font-black bg-primary text-white dark:text-slate-900 leading-none">
+            <span className="ml-1.5 px-1.5 py-0.5 rounded-full text-[9px] font-black bg-primary text-white leading-none">
               {issues.length}
             </span>
           )}
